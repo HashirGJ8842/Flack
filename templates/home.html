@@ -8,10 +8,58 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>Flack Messaging</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Flack</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        {% if display_name %}
+        <div class="mr-auto">
+
+        </div>
+        <span style="color: white" class="mr-3">Welcome {{ display_name }}</span>
+        <a class="btn btn-outline-success" href={{ url_for('logout') }}>Logout</a>
+        {% else %}
+        <div class="mr-auto">
+
+        </div>
+        <button class="btn btn-outline-success disabled">Logout</button>
+        {% endif %}
+</nav>
+    <div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+    </div>
+    <div class="row">
+        {% if display_name %}
+
+        {% else %}
+        <div class="col-1 col-lg-2">
+
+        </div>
+        <div class="col-lg-8 col-10 mt-5">
+            <h1> Enter the name you want to be displayed with :- </h1>
+            <form method="post" action="">
+            <input class="form-control form-control-lg mt-5" placeholder="Display name" name="display_name">
+                <div class="mt-5 py-auto">
+                    <center>
+                <button class="btn btn-outline-success btn-dark"> GO! </button>
+                        </center>
+                    </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
