@@ -22,7 +22,7 @@
         <div class="mr-auto">
 
         </div>
-        <span style="color: white" class="mr-3">Welcome {{ display_name }}</span>
+        <span style="color: white" class="mr-3">Welcome <span id="name">{{ display_name }}</span></span>
         <a class="btn btn-outline-success" href={{ url_for('logout') }}>Logout</a>
         {% else %}
         <div class="mr-auto">
@@ -48,20 +48,35 @@
 
         </div>
         <div class="col-lg-8 col-10 mt-5">
-            <h1> Create a new Channel :- </h1>
+            <h1 class="border-bottom"> Create a new Channel :- </h1>
             <input class="form-control form-control-lg mt-5 new-channel-name" placeholder="Enter Channel Name" name="channel">
                 <div class="mt-5 py-auto">
                     <center>
                 <button class="btn btn-outline-success btn-dark" id="new"> GO! </button>
                         </center>
                     </div>
-            <h1 class="mt-5"> Or choose from existing ones :- </h1>
+            <h1 class="mt-5 border-bottom"> Or choose from existing ones :- </h1>
+            <ul class="border-bottom p-3">
                 {% for i in channels_name %}
-                <button class="channell" data-channel="{{ i }}"  style="text-decoration: none"> {{ i }} </button><br/>
+                <li><button class="channell">{{ i }}</button></li>
                 {% endfor %}
-        </div>
-        <div id="messages-section" class="col-5">
-
+            </ul>
+            <!--    <button class="channell" data-channel="{{ i }}"  style="text-decoration: none"> {{ i }} </button><br/> -->
+            <div class="col-lg-12 col-10">
+                <div class="card">
+  <div class="card-body" id="messages-section">
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <div class="row">
+          <div class="col-10">
+      <input class="form-control form-control-lg" id="message"/>
+          </div>
+          <div class="col-2">
+              <button class="btn btn-outline-success btn-dark" id="message-button">Submit</button>
+          </div>
+      </div>
+  </div>
+</div>
+            </div>
         </div>
         </div>
         {% else %}

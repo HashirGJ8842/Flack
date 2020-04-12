@@ -16,16 +16,13 @@ channels_name = []
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    if session.get('channel') == None:
-        session['channel'] = None
     if session.get('username') == None:
         session['username'] = None
-        session['channel'] = None
     if request.method == "POST":
         if request.form.get('display_name'):
             session['username'] = request.form.get('display_name')
             flash(f'You\'re now logged in as {session["username"]}', 'success')
-    return render_template('home.html', display_name=session['username'], channels_name=channels_name)
+    return render_template('home.html', display_name=session['username'], channels_name=channels_name, channels=channels)
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -39,10 +36,12 @@ def logout():
 def new_channel(data):
     session['channel'] = data['channel']
     channel = data['channel']
-    channels_name.append(channel)
+    new = False
+    if channel not in channels_name:
+        channels_name.append(channel)
+        new = True
     channels.append({'name': channel, 'messages': None})
-    print('HI')
-    emit('show channel', {'name': channel, 'messages': None}, broadcast=True)
+    emit('show channel', {'name': channel, 'messages': None, 'new': new}, broadcast=True)
 
 
 @socketio.on('channel select')
@@ -54,8 +53,13 @@ def channel_select(data):
         if i['name'] == channel:
             break
     try:
-        i['messaeges']
+        i['messages']
     except KeyError:
         i['messages'] = None
 
-    emit('show channel', {'name': i['name'], 'messages': i['messages']}, broadcast=True)
+    emit('show channel', {'name': i['name'], 'messages': i['messages'], 'new': False}, broadcast=True)
+
+
+@socketio.on('store message')
+def store_message(data):
+    print(data['message'])
