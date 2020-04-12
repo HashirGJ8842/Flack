@@ -42,53 +42,30 @@
                 {% endif %}
             {% endwith %}
     </div>
-    <div class="row">
         {% if display_name %}
-        {% if channel %}
-        <div class="col-1 col-lg-2">
-
-        </div>
-        <div class="col-lg-8 col-10 mt-5">
-            <h1> {{ channel }} </h1>
-            <form method="post" action="">
-            <input class="form-control form-control-lg mt-5" placeholder="Enter Channel Name" name="channel">
-                <div class="mt-5 py-auto">
-                    <center>
-                <button class="btn btn-outline-success btn-dark"> GO! </button>
-                        </center>
-                    </div>
-            </form>
-            <h1 class="mt-5"> Or choose from existing ones :- </h1>
-                {% for i in channels_name %}
-                <button data-channel="{{ i }}"> {{ i }} </button><br/>
-                {% endfor %}
-        </div>
-        <div id="messages-section">
-
-        </div>
-        {% else %}
+        <div class="row">
         <div class="col-1 col-lg-2">
 
         </div>
         <div class="col-lg-8 col-10 mt-5">
             <h1> Create a new Channel :- </h1>
-            <form method="post" action="">
-            <input class="form-control form-control-lg mt-5" placeholder="Enter Channel Name" name="channel">
+            <input class="form-control form-control-lg mt-5 new-channel-name" placeholder="Enter Channel Name" name="channel">
                 <div class="mt-5 py-auto">
                     <center>
-                <button class="btn btn-outline-success btn-dark"> GO! </button>
+                <button class="btn btn-outline-success btn-dark" id="new"> GO! </button>
                         </center>
                     </div>
-            </form>
             <h1 class="mt-5"> Or choose from existing ones :- </h1>
-            <ul>
                 {% for i in channels_name %}
-                <li> {{ i }} </li>
+                <button class="channell" data-channel="{{ i }}"  style="text-decoration: none"> {{ i }} </button><br/>
                 {% endfor %}
-            </ul>
         </div>
-        {% endif %}
+        <div id="messages-section" class="col-5">
+
+        </div>
+        </div>
         {% else %}
+        <div class="row">
         <div class="col-1 col-lg-2">
 
         </div>
@@ -103,8 +80,8 @@
                     </div>
             </form>
         </div>
+        </div>
         {% endif %}
-    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, session, url_for, redirect
 from flask_session import Session
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
@@ -25,14 +25,7 @@ def home():
         if request.form.get('display_name'):
             session['username'] = request.form.get('display_name')
             flash(f'You\'re now logged in as {session["username"]}', 'success')
-        elif request.form.get("channel"):
-            if request.form.get("channel") in channels_name:
-                flash(f'Channel name {request.form.get("channel")} already exists, please take a different name', 'danger')
-                return render_template('home.html', display_name=session['username'], channel=session['channel'], channels=channels, channels_name=channels_name)
-            session['channel'] = request.form.get('channel')
-            channels.append({'name': request.form.get('channel')})
-            channels_name.append(request.form.get('channel'))
-    return render_template('home.html', display_name=session['username'], channel=session['channel'], channels=channels, channels_name=channels_name)
+    return render_template('home.html', display_name=session['username'], channels_name=channels_name)
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -42,9 +35,20 @@ def logout():
     return redirect('home')
 
 
+@socketio.on('new channel')
+def new_channel(data):
+    session['channel'] = data['channel']
+    channel = data['channel']
+    channels_name.append(channel)
+    channels.append({'name': channel, 'messages': None})
+    print('HI')
+    emit('show channel', {'name': channel, 'messages': None}, broadcast=True)
+
+
 @socketio.on('channel select')
-def func(data):
+def channel_select(data):
     print('Came from JS')
+    session['channel'] = data['channel']
     channel = data['channel']
     for i in channels:
         if i['name'] == channel:
@@ -54,4 +58,4 @@ def func(data):
     except KeyError:
         i['messages'] = None
 
-    emit('show channel', {'name': i['name']}, broadcast=True)
+    emit('show channel', {'name': i['name'], 'messages': i['messages']}, broadcast=True)

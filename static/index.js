@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-// When connected, configure buttons
     socket.on('connect', () => {
     console.log("Hello")
-// Each button should emit a "submit vote" event
-    document.querySelectorAll('button').forEach(button => {
+    document.querySelector('#new').onclick = () => {
+    console.log('Hiiii')
+        const new_channel = document.querySelector('.new-channel-name').value;
+        socket.emit('new channel', {'channel': new_channel})
+    };
+    document.querySelectorAll('.channell').forEach(button => {
         button.onclick = () => {
         const channel = button.dataset.channel;
         console.log('HI')
