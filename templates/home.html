@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <!-- Required meta tags -->
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
       <script src="static/index.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -48,7 +49,7 @@
 
         </div>
         <div class="col-lg-8 col-10 mt-5">
-            <h1> Create a new Channel :- </h1>
+            <h1> {{ channel }} </h1>
             <form method="post" action="">
             <input class="form-control form-control-lg mt-5" placeholder="Enter Channel Name" name="channel">
                 <div class="mt-5 py-auto">
@@ -57,11 +58,13 @@
                         </center>
                     </div>
             </form>
-            <ul class="mt-5">
+            <h1 class="mt-5"> Or choose from existing ones :- </h1>
                 {% for i in channels_name %}
-                <div onclick="" <li>{{ i }}</li>
+                <button data-channel="{{ i }}"> {{ i }} </button><br/>
                 {% endfor %}
-            </ul>
+        </div>
+        <div id="messages-section">
+
         </div>
         {% else %}
         <div class="col-1 col-lg-2">
@@ -77,6 +80,7 @@
                         </center>
                     </div>
             </form>
+            <h1 class="mt-5"> Or choose from existing ones :- </h1>
             <ul>
                 {% for i in channels_name %}
                 <li> {{ i }} </li>
