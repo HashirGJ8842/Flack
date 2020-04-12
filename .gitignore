@@ -17,6 +17,9 @@ _mailinglist
 docs/_build/
 .vscode
 flask_session
+__pycache__
+
+
 
 # Coverage reports
 htmlcov/
