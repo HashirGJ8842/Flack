@@ -56,7 +56,7 @@
                         </center>
                     </div>
             <h1 class="mt-5 border-bottom"> Or choose from existing ones :- </h1>
-            <ul class="border-bottom p-3">
+            <ul class="border-bottom p-3" id="total-channels">
                 {% for i in channels_name %}
                 <li><button class="channell">{{ i }}</button></li>
                 {% endfor %}
@@ -65,7 +65,12 @@
             <div class="col-lg-12 col-10">
                 <div class="card">
   <div class="card-body" id="messages-section">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <div id="messages-channel-name">
+
+      </div>
+      <ul id="message-channel-content">
+
+      </ul>
       <div class="row">
           <div class="col-10">
       <input class="form-control form-control-lg" id="message"/>

@@ -40,8 +40,8 @@ def new_channel(data):
     if channel not in channels_name:
         channels_name.append(channel)
         new = True
-    channels.append({'name': channel, 'messages': None})
-    emit('show channel', {'name': channel, 'messages': None, 'new': new}, broadcast=True)
+    channels.append({'name': channel, 'messages': []})
+    emit('create channel', {'name': channel,'new': new}, broadcast=True)
 
 
 @socketio.on('channel select')
@@ -52,14 +52,14 @@ def channel_select(data):
     for i in channels:
         if i['name'] == channel:
             break
-    try:
-        i['messages']
-    except KeyError:
-        i['messages'] = None
 
-    emit('show channel', {'name': i['name'], 'messages': i['messages'], 'new': False}, broadcast=True)
+    emit('show channel', {'name': i['name'], 'messages': i['messages'], 'new': False}, broadcast=False)
 
 
 @socketio.on('store message')
 def store_message(data):
-    print(data['message'])
+    print("TEST")
+    for i in channels:
+        if i['name']==data['channel']:
+            i['messages'].append(data['message'])
+    emit('display message', {'message': data['message']}, broadcast=True)
