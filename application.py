@@ -71,4 +71,6 @@ def store_message(data):
     for i in channels:
         if i['name'] == data['channel']:
             i['messages'].append(data['message'])
+            if len(i['messages']) >= 100:
+                i['messages'].remove(i['messages'][0])
     emit('display message', {'message': data['message']}, broadcast=True)
