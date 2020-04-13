@@ -11,6 +11,7 @@ Session(app)
 socketio = SocketIO(app)
 channels = []
 channels_name = []
+messages = []
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -22,7 +23,40 @@ def home():
         if request.form.get('display_name'):
             session['username'] = request.form.get('display_name')
             flash(f'You\'re now logged in as {session["username"]}', 'success')
-    return render_template('home.html', display_name=session['username'], channels_name=channels_name, channels=channels)
+        elif request.form.get('channel'):
+            if request.form.get('channel') in channels_name:
+                flash(f'This channel name already exists, please try again!!', 'danger')
+                return render_template('home.html', display_name=session['username'], channels=channels)
+            session['channel'] = request.form.get('channel')
+            flash(f'Channel {session["channel"]} successfully created', 'success')
+            channels.append({'name': session['channel'], 'messages': []})
+            channels_name.append(request.form.get('channel'))
+    return render_template('home.html', display_name=session['username'], channels=channels)
+
+
+@app.route('/<channel>', methods=["GET", "POST"])
+def messages(channel):
+    if session.get('username') == None:
+        session['username'] = None
+        session['channel'] = None
+    if session.get('channel') == None:
+        session['channel'] = None
+    if request.method == "POST":
+        if request.form.get('display_name'):
+            session['username'] = request.form.get('display_name')
+            flash(f'You\'re now logged in as {session["username"]}', 'success')
+        elif request.form.get('channel'):
+            if request.form.get('channel') in channels_name:
+                flash(f'This channel name already exists, please try again!!', 'danger')
+                return render_template('home.html', display_name=session['username'], channels=channels)
+            session['channel'] = request.form.get('channel')
+            flash(f'Channel {session["channel"]} successfully created', 'success')
+            channels.append({'name': session['channel'], 'messages': []})
+            channels_name.append(request.form.get('channel'))
+    for i in channels:
+        if i['name'] == channel:
+            messages = i['messages']
+    return render_template('messages.html', messages=messages, display_name=session['username'], channels=channels, heading=channel)
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -32,34 +66,9 @@ def logout():
     return redirect('home')
 
 
-@socketio.on('new channel')
-def new_channel(data):
-    session['channel'] = data['channel']
-    channel = data['channel']
-    new = False
-    if channel not in channels_name:
-        channels_name.append(channel)
-        new = True
-    channels.append({'name': channel, 'messages': []})
-    emit('create channel', {'name': channel,'new': new}, broadcast=True)
-
-
-@socketio.on('channel select')
-def channel_select(data):
-    print('Came from JS')
-    session['channel'] = data['channel']
-    channel = data['channel']
-    for i in channels:
-        if i['name'] == channel:
-            break
-
-    emit('show channel', {'name': i['name'], 'messages': i['messages'], 'new': False}, broadcast=False)
-
-
 @socketio.on('store message')
 def store_message(data):
-    print("TEST")
     for i in channels:
-        if i['name']==data['channel']:
+        if i['name'] == data['channel']:
             i['messages'].append(data['message'])
     emit('display message', {'message': data['message']}, broadcast=True)

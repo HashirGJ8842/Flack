@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+
+{% block messages_section %}
+<div class="col-lg-12 col-10">
+                <div class="card">
+  <div class="card-body" id="messages-section">
+      <h1 id="heading">{{ heading }}</h1>
+      <ul id="message-channel-content">
+          {% for i in messages %}
+          <li>{{ i }}</li>
+          {% endfor %}
+      </ul>
+      <div class="row">
+          <div class="col-10">
+      <input class="form-control form-control-lg" id="message"/>
+          </div>
+          <div class="col-2">
+              <button class="btn btn-outline-success btn-dark" id="message-button">Submit</button>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+{% endblock %}
