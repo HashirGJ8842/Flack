@@ -9,7 +9,7 @@ cfgv==2.0.1
 chardet==3.0.4
 Click==7.0
 colorama==0.4.1
-Django==3.0.4
+Django==3.0.14
 dnspython==1.16.0
 email-validator==1.0.5
 face-recognition-models==0.3.0
